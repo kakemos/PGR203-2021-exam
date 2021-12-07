@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public interface HttpController {
 
-    //Creating a interface since every controller uses both getPath() and handle()
+    //Creating an interface since every controller uses both getPath() and handle()
 
     String getPath();
 

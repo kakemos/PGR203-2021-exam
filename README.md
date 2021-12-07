@@ -1,15 +1,9 @@
 # PGR203 Avansert Java eksamen
 
+[![.github/workflows/maven.yml](https://github.com/kristiania-pgr203-2021/pgr203-exam-mgrinaker/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/kristiania-pgr203-2021/pgr203-exam-mgrinaker/actions/workflows/maven.yml)
 
-## Beskriv hvordan programmet skal testes:
-
-## Korreksjoner av eksamensteksten i Wiseflow:
-
-**DET ER EN FEIL I EKSEMPELKODEN I WISEFLOW:**
-
-* I `addOptions.html` skulle url til `/api/tasks` vært `/api/alternativeAnswers` (eller noe sånt)
-
-**Det er viktig å være klar over at eksempel HTML i eksamensoppgaven kun er til illustrasjon. Eksemplene er ikke tilstrekkelig for å løse alle ekstraoppgavene og kandidatene må endre HTML-en for å være tilpasset sin besvarelse**
+## Github repository
+https://github.com/kristiania-pgr203-2021/pgr203-exam-mgrinaker
 
 ## Hvordan man kjører programmet
 Først må man bygge en executable jar-fil:
@@ -19,16 +13,17 @@ Først må man bygge en executable jar-fil:
   * dataSource.password=passordet til database eieren
   * dataSource.url=jdbc:postgresql://localhost:5432/'navnet på databasen'
   * dataSource.username=brukernavnet til eieren
-* Skriv deretter i terminalen java -jar /target/prg203-axam-mgrinaker-1.0-SNAPSHOT.jar
+* Skriv deretter i terminalen: java -Dfile.encoding="UTF-8" -jar target/pgr203-exam-mgrinaker-1.0-SNAPSHOT.jar
 
-
-Programmet skal brukes via en browser, vi har kun brukt browseren chrome. 
-I urlen skal man skrive inn "http://localhost:1963/index.html".
-Man vi da få opp en rekke spørsmål som skal besvarsel med svaralternativer. Men man på trykke på add knappen
-for hvert svar som besvares for at det skal bli registrert.
-Før man kan besvare spørmsålene er man nødt til å lage bruker, hvis ikke fungerer det ikke å svare.(Da krsæjer serveren).
-Hvis man ønsker å redigere ett spørsmål er det mulighet for i navigationbar rett under overskriften. 
-Der ser man også at det er mulighet for å legge flere svaralternativer på ett spørsmål hvis man ønsker det.
+Programmet skal brukes via en browser, der vi selv kun har brukt browseren Google Chrome. 
+Man starter med å gå til "http://localhost:1963/index.html".
+Der vil aller først få opp en form der man skal skrive inn fornavn, etternavn og epost. Gjør man ikke dette,
+vil det ikke være mulig å svare på spørsmål, da man trenger å registrere brukeren før man kan registrere et svar.
+Serveren vil altså krasje hvis den ikke får tak i en bruker.
+Etter at brukeren er registrert, kommer man til en rekke spørsmål som skal besvares med svaralternativer. Man trykker så 
+på Submit answer-knappen for hvert spørsmål for å registrere sitt svar.
+Hvis man ønsker å redigere et spørsmål er det mulighet for det i navigationbaren rett under overskriften. 
+Der ser man også at det er mulighet for å legge til flere svaralternativer på et spørsmål hvis man ønsker det.
 
 
 ## Datamodell
@@ -36,12 +31,14 @@ Der ser man også at det er mulighet for å legge flere svaralternativer på ett
 ![](docs/plantUML.png)
 
 ## Ekstra leveranse utover minimum
-Første gang man besøker undersøkelsen får de opp inputfelt der de må skrive inn opplysnigner om seg selv.
+Første gang man besøker undersøkelsen får man opp tre inputfelt der man må skrive inn og lagre opplysnigner om seg selv.
 
 Hver gang brukeren har lagt inn ett nytt spørsmål eller ett nytt option blir brukeren sendt tilbake til index.html.
-Dette ble gjort ved at vi startLine til "HTTP/1.1 303 See other" og location til "http://localhost:1963/index.html".
+Dette ble gjort ved at vi gjorde startLine til "HTTP/1.1 303 See other" og location til "http://localhost:1963/index.html".
 
-Vi har lagt inn UTF-8-decoding på alle inputfelt, sånn at både Æ, Ø, Å og @ skal bli lest inn og tolka riktig.
+Vi har lagt inn UTF-8-decoding på alle inputfelt, sånn at både Æ, Ø, Å og @ skal bli lest inn og tolka riktig. Likevel vil
+ikke ÆØÅ funke når man kjører jar-fila, så derfor skal man kjøre java -Dfile.encoding="UTF-8" -jar target/pgr203-exam-mgrinaker-1.0-SNAPSHOT.jar
+når man kjører jar-fila for å få de med.
 
 Der vi legger til brukerinformasjon i starten av surveyen har vi gjort sånn at navnet til brukeren lagres som en cookie.
 Senere bruker vi denne cookien når brukeren registrerer svarene sine i surveyen, og kobler den opp mot personId i person-databasen.
@@ -50,7 +47,8 @@ I HttpServer har vi kode som leser filer fra disc, der den sjekker fil-endingene
 skal brukes. Det gjør det mulig å laste inn både .txt, .html og .css-filer riktig.
 
 En abstractDao ble laget for å ikke få duplisert kode. Der har vi brukt generics for at de andre klassene kan få bruke 
-metodene. Der har vi insert(), retrieve(), listAll() og update().
+metodene. Der har vi insert(), retrieve(), listAll() og update(). Vi har med update() i PersonDao, men de brukes ikke i
+løsningen. Vi valge likevel å ta de med så vi skulle ha mulighet til å bruke de om det trengtes.
 
 Hvis handleClient får "HTTP/1.1 500 Internal Server Error" så vil den skrive ut "Statuscode 500" til brukeren for å 
 fortelle at serveren har kræsjet.
@@ -59,33 +57,33 @@ så vil de ble sendt rett til index.html.
 
 I tab-vinduet har vi lagt inn ett lite favicon. Dette favicon ble kodet inn i alle html-filer i headeren.
 
-Under datamodell har en illustrasjon over hvordan databasen og noen diagrammer over hvordan programmet vårt fungerer.
-Vi føler vi har fått med oss de aller viktigste tabbellene som trengs for dette prosjektet. Vi kunne nok ha hatt med 
-oss mere, som hvilken jobb de har og hvor de jobber. Dette ble ikke med grunnet at vi heller ønsket å fokusere på andre
-oppgaver i dette prosjektet for å gjøre det bedre. 
+Under datamodell har vi en illustrasjon over hvordan databasen er satt opp, og noen diagrammer over hvordan programmet vårt fungerer.
+Vi føler vi har fått med oss de aller viktigste tabellene som trengs for dette prosjektet. Vi prøvde oss i starten med to
+ekstra tabeller, workplace og profession, men syntes disse ble overflødige og vi valgte heller å fokusere på å forbedre
+andre aspekter i prosjektet enn å ha en unødvendig komplisert datamodell.
 
 ## Sjekkliste
 
 ## Vedlegg: Sjekkliste for innlevering
 
 * [x] Dere har lest eksamensteksten
-* [ ] Dere har lastet opp en ZIP-fil med navn basert på navnet på deres Github repository
-* [ ] Koden er sjekket inn på github.com/pgr203-2021-repository
+* [x] Dere har lastet opp en ZIP-fil med navn basert på navnet på deres Github repository
+* [x] Koden er sjekket inn på github.com/pgr203-2021-repository
 * [x] Dere har committed kode med begge prosjektdeltagernes GitHub konto (alternativt: README beskriver arbeidsform)
 
 ### README.md
 
-* [ ] `README.md` inneholder en korrekt link til Github Actions
+* [x] `README.md` inneholder en korrekt link til Github Actions
 * [x] `README.md` beskriver prosjektets funksjonalitet, hvordan man bygger det og hvordan man kjører det
 * [x] `README.md` beskriver eventuell ekstra leveranse utover minimum
 * [x] `README.md` inneholder et diagram som viser datamodellen
 
 ### Koden
 
-* [ ] `mvn package` bygger en executable jar-fil
-* [ ] Koden inneholder et godt sett med tester
-* [ ] `java -jar target/...jar` (etter `mvn package`) lar bruker legge til og liste ut data fra databasen via webgrensesnitt
-* [ ] Serveren leser HTML-filer fra JAR-filen slik at den ikke er avhengig av å kjøre i samme directory som kildekoden
+* [x] `mvn package` bygger en executable jar-fil
+* [x] Koden inneholder et godt sett med tester
+* [x] `java -jar target/...jar` (etter `mvn package`) lar bruker legge til og liste ut data fra databasen via webgrensesnitt
+* [x] Serveren leser HTML-filer fra JAR-filen slik at den ikke er avhengig av å kjøre i samme directory som kildekoden
 * [x] Programmet leser `dataSource.url`, `dataSource.username` og `dataSource.password` fra `pgr203.properties` for å connecte til databasen
 * [x] Programmet bruker Flywaydb for å sette opp databaseskjema
 * [x] Server skriver nyttige loggmeldinger, inkludert informasjon om hvilken URL den kjører på ved oppstart
@@ -114,3 +112,5 @@ oppgaver i dette prosjektet for å gjøre det bedre.
 * [x] I forelesningen fikk vi en rar feil med CSS når vi hadde `<!DOCTYPE html>`. Grunnen til det er feil content-type. Klarer dere å fikse det slik at det fungerer å ha `<!DOCTYPE html>` på starten av alle HTML-filer?
 * [ ] Klarer dere å lage en Coverage-rapport med GitHub Actions med Coveralls? (Advarsel: Foreleser har nylig opplevd feil med Coveralls så det er ikke sikkert dere får det til å virke)
 * [ ] FARLIG: I løpet av kurset har HttpServer og tester fått funksjonalitet som ikke lenger er nødvendig. Klarer dere å fjerne alt som er overflødig nå uten å også fjerne kode som fortsatt har verdi? (Advarsel: Denne kan trekke ned dersom dere gjør det feil!)
+
+Laget av Martine Grinaker,Tonje Husvik, Cathrine Jakobsen

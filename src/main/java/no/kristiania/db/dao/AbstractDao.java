@@ -41,7 +41,6 @@ public abstract class AbstractDao<T> {
         }
     }
 
-
     public void updateRow(String updateString, long id, String sql) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -51,7 +50,6 @@ public abstract class AbstractDao<T> {
             }
         }
     }
-
 
     public abstract List<T> listAll() throws SQLException;
 
@@ -69,9 +67,7 @@ public abstract class AbstractDao<T> {
         }
     }
 
-
     abstract protected T rowToObject(ResultSet rs) throws SQLException;
 
     protected abstract void insertObject(T obj, PreparedStatement insertStatement) throws SQLException;
-
 }

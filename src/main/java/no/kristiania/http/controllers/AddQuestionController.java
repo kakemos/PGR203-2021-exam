@@ -35,7 +35,6 @@ public class AddQuestionController implements HttpController {
 
 
         //Using if else to check if some of the input fields are empty or null
-
         if ((question.getQuestionTitle() == null || question.getQuestionTitle().isBlank()) &&
                 (question.getQuestionDescription() == null || question.getQuestionDescription().isBlank())){
             return new HttpMessage(

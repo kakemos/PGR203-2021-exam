@@ -43,7 +43,6 @@ public class QuestionDaoTest {
         assertThat(dao.listAll())
                 .extracting(Question :: getQuestionTitle)
                 .contains(question.getQuestionTitle(), anotherQuestion.getQuestionTitle());
-
     }
 
     @Test

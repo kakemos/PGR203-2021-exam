@@ -36,6 +36,15 @@ public class AddPersonController implements HttpController {
         person.setLastName(lastName);
         person.setMailAddress(email);
 
+        // Using an if to check if the first name-input field is empty or null,
+        // since only this field is required for the program. The two others are optional
+        if (person.getFirstName() == null || person.getFirstName().isBlank()){
+            return new HttpMessage(
+                    "HTTP/1.1 400 request error",
+                    "First name must be provided"
+            );
+        }
+
         personDao.insert(person);
 
         return new HttpMessage("HTTP/1.1 303 See other", "It is done", "/index.html");

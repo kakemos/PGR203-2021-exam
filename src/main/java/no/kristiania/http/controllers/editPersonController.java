@@ -29,7 +29,7 @@ public class editPersonController implements HttpController{
         String newLastName = URLDecoder.decode(queryMap.get("newLastName"), StandardCharsets.UTF_8);
         String newEmail = URLDecoder.decode(queryMap.get("newEmail"), StandardCharsets.UTF_8);
 
-        //Using if else to check if some of the input fields are empty og if everyone is !=""
+        //Using if else to check if some of the input fields are empty or if everyone are !=""
         if(newFirstName == ""){
             personDao.updateLastName(newLastName, person_id);
             personDao.updateEmail(newEmail, person_id);
