@@ -1,20 +1,25 @@
 package no.kristiania.http;
 
+import no.kristiania.http.controllers.HttpController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
 
 public class HttpServer {
 
     private final ServerSocket serverSocket;
     private final HashMap<String, HttpController> controllers = new HashMap<>();
-    public static String query = null;
     public static String requestTarget;
+    public static String query = null;
     public static String fileTarget;
+    private static final Logger logger = LoggerFactory.getLogger(HttpServer.class);
 
     public HttpServer(int serverPort) throws IOException {
         serverSocket = new ServerSocket(serverPort);
@@ -26,7 +31,7 @@ public class HttpServer {
             while (true){
                 handleClient();
             }
-        } catch (IOException | SQLException e) {
+        } catch (IndexOutOfBoundsException | IOException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -52,32 +57,42 @@ public class HttpServer {
             response.write(clientSocket);
         } else {
             InputStream fileResource = getClass().getResourceAsStream(fileTarget);
-            if(fileResource != null){
+            if(fileResource != null) {
                 ByteArrayOutputStream buffer = new ByteArrayOutputStream();
                 fileResource.transferTo(buffer);
                 String responseText = buffer.toString();
 
                 String contentType = "text/plain";
-                if(requestTarget.endsWith(".html")){
+                if (requestTarget.endsWith(".html")) {
                     contentType = "text/html; charset=utf-8";
                 } else if (requestTarget.endsWith(".css")) {
-                    contentType ="text/css";
+                    contentType = "text/css";
                 }
-
                 writeOkResponse(clientSocket, responseText, contentType);
                 return;
+            }else{
+                String responseText = "File not found: " + requestTarget;
+
+                String response = "HTTP/1.1 404 Not found\r\n" +
+                        "Content-Length: " + responseText.length() + "\r\n" +
+                        "Content-Type: text/html; charset=utf-8\r\n" +
+                        "Connection: close\r\n" +
+                        "\r\n" +
+                        responseText;
+                clientSocket.getOutputStream().write(response.getBytes());
             }
 
-            String responseText = "File not found: " + requestTarget;
+            String responseText = "Statuscode 500";
 
-            String response = "HTTP/1.1 404 Not found\r\n" +
+            String response = "HTTP/1.1 500 Internal Server Error\r\n" +
                     "Content-Length: " + responseText.length() + "\r\n" +
                     "Content-Type: text/html; charset=utf-8\r\n" +
                     "Connection: close\r\n" +
                     "\r\n" +
                     responseText;
-
             clientSocket.getOutputStream().write(response.getBytes());
+
+            logger.info("Oh no, something went terribly wrong. Statuscode 500.");
         }
     }
 

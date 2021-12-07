@@ -1,0 +1,120 @@
+*{
+    font-family: system-ui;
+    font-size: small;
+}
+
+body {
+    background-color: #eee4e1;
+}
+
+.contentContainer {
+    background-color: white;
+    padding: 15px;
+    margin: 0 auto;
+    display: table;
+}
+
+#questionDiv {
+    min-width: 525px;
+    width: 50%;
+}
+
+.descriptionDiv {
+    margin: 10px 0 5px 0;
+}
+
+h2 {
+    margin: 0;
+    font-size: large;
+}
+
+h1 {
+    font-size: xx-large;
+}
+
+h1, h2 {
+    font-family: "Times New Roman";
+    font-weight: bolder;
+}
+
+.optionsInput{
+    display: inline-block;
+    margin-right: 15px;
+    border: #b2967d;
+    font-family: system-ui;
+    font-weight: 300;
+    font-size: small;
+}
+
+.optionsAddButton {
+    margin-top: 15px;
+}
+
+button {
+    background-color: #b2967d;
+    color: white;
+    border: none;
+    padding: 5px;
+}
+
+button:hover {
+    background-color: #cbb6a0;
+}
+
+#cookieDiv {
+    margin: 0 auto;
+    display: table;
+}
+
+#personInfo{
+    margin: 0 auto;
+    display: table;
+    width: fit-content;
+}
+
+#submitPersonInfoButton {
+    margin: 0 auto;
+    display: table;
+}
+
+.field {
+    margin-bottom: 5px;
+    width: 300px;
+}
+
+#menuDiv {
+    margin: 0 auto;
+    display: table;
+}
+
+a {
+    color: black;
+}
+
+.menuLink {
+    margin-right: 20px;
+}
+
+.headline {
+    margin: 0 auto;
+    display: table;
+}
+
+.addQuestionLabel {
+    margin: 0 auto;
+    display: table;
+}
+
+.addQuestionLabel {
+    margin-bottom: 10px;
+}
+
+.returnToFrontpageDiv {
+    margin: 0 auto;
+    display: table;
+}
+
+#editSurveySubHeadline {
+    margin: 0 auto;
+    display: table;
+}

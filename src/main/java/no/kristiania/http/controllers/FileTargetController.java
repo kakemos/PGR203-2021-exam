@@ -1,11 +1,13 @@
-package no.kristiania.http;
+package no.kristiania.http.controllers;
+
+import no.kristiania.http.HttpMessage;
 
 import java.sql.SQLException;
 import java.util.Map;
 
 import static no.kristiania.http.HttpServer.query;
 
-public class HelloFileTargetController implements HttpController{
+public class FileTargetController implements HttpController{
     @Override
     public String getPath() {
         return "/hello";
@@ -19,7 +21,6 @@ public class HelloFileTargetController implements HttpController{
             yourName = queryMap.get("lastName") + ", " + queryMap.get("firstName");
         }
         String responseText = "<p>Hello " + yourName + "!</p>";
-        String contentType = "text/html; charset=utf-8";
 
         return new HttpMessage("HTTP/1.1 200 OK", responseText);
     }

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kristiania Survey</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.discordapp.com/attachments/892652848842698757/908346996941795398/unknown.png" rel="icon" type="image/x-icon"/>
+</head>
+<body onload="checkCookie()">
+    <h1 class="headline">Questionnaire</h1><br>
+
+    <div id="menuDiv">
+        <a class="menuLink" href="newQuestion.html">Add new question</a>
+        <a class="menuLink" href="addOption.html">Add options</a>
+        <a class="menuLink" href="editSurvey.html">Edit survey</a>
+    </div><br><br>
+
+    <div id="cookieDiv">
+    <form action="/api/setCookie" method="post">
+        <p>Please enter your information below before starting the survey.</p>
+        <div id="personInfo">
+            <input class="field" type="text" id="firstName" placeholder="first name" style="text-transform: capitalize;"><br>
+            <input class="field" type="text" id="lastName" name="lastName" placeholder="last name" style="text-transform: capitalize;"><br>
+            <input class="field" type="email" id="email" name="email" placeholder="name@email.com"><br>
+
+            <button id="submitPersonInfoButton" type="submit" onclick="setCookie('firstName')">Submit</button><br>
+        </div>
+    </form>
+    </div>
+
+    <form method="POST" action="/api/newAnswer" id="questions">
+    </form>
+
+</body>
+
+<script>
+
+    let today = new Date();
+    let expiry = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+
+    function setCookie(firstName) {
+        let firstNameValue = document.getElementById(firstName).value;
+
+        document.cookie = firstName + "=" + firstNameValue + "; path=/; expires=" + expiry.toUTCString();
+    }
+
+    function getCookie(firstName) {
+        let re = new RegExp(firstName + "=([^;]+)");
+        let value = re.exec(document.cookie);
+        return value[1];
+    }
+
+    function checkCookie() {
+        let firstName = getCookie("firstName");
+        if (firstName !== "" || firstName != null) {
+            document.getElementById("cookieDiv").innerHTML = "<p>Welcome, " + firstName + "!</p>";
+        }
+    }
+
+    fetch("/api/question")
+    .then(function(response){
+        return response.text();
+    }).then(function(text){
+        document.getElementById("questions").innerHTML = text;
+    });
+
+</script>
+</html>

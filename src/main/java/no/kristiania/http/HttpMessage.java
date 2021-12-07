@@ -10,6 +10,7 @@ public class HttpMessage {
     public String startLine;
     public final HashMap<String, String> headerFields = new HashMap<>();
     public String messageBody;
+    public String location;
 
     public HttpMessage(Socket socket) throws IOException {
         startLine = HttpMessage.readLine(socket);
@@ -22,6 +23,12 @@ public class HttpMessage {
     public HttpMessage(String startLine, String messageBody){
         this.startLine = startLine;
         this.messageBody = messageBody;
+    }
+
+    public HttpMessage(String startLine, String messageBody, String location){
+        this.startLine = startLine;
+        this.messageBody = messageBody;
+        this.location = location;
     }
 
     public static Map<String, String> parseRequestParameters(String query) {
@@ -57,8 +64,8 @@ public class HttpMessage {
         String headerLine;
         while(!(headerLine = HttpMessage.readLine(socket)).isBlank()){
             int colonPos = headerLine.indexOf(':');
-            String key = headerLine.substring(0, colonPos); //valuen som starter på index 0 og slutter på : sin index
-            String value = headerLine.substring(colonPos + 1).trim(); //tar valuen på indexen etter : og resten av linja. trim fjerner whitespace
+            String key = headerLine.substring(0, colonPos);
+            String value = headerLine.substring(colonPos + 1).trim();
             headerFields.put(key, value);
         }
     }
@@ -71,14 +78,16 @@ public class HttpMessage {
         while ((c = in.read()) != -1 && c != '\r'){
             result.append((char)c);
         }
-        in.read(); //leser en ekstra linje
+        in.read();
         return result.toString();
     }
 
     public void write(Socket socket) throws IOException {
         String response = startLine + "\r\n" +
                 "Content-Length: " + messageBody.getBytes().length + "\r\n" +
+                "Content-Type: text/html; utf-8\r\n" +
                 "Connection: close\r\n" +
+                "Location: " + location + "\r\n" +
                 "\r\n" +
                 messageBody;
 

@@ -1,0 +1,27 @@
+@startuml
+
+actor User
+participant browser
+participant HttpServer
+participant controllers
+participant ListQuestionAndOptionController
+participant QuestionDao
+database servey_db
+participant RowToObject
+
+User --> browser: list question and option
+browser --> HttpServer : /index.html
+HttpServer --> controllers: /api/question
+HttpServer <-- controllers: ListQuestionAndOptionController
+HttpServer --> ListQuestionAndOptionController: request = handle
+ListQuestionAndOptionController -> QuestionDao: listAll()
+QuestionDao -> servey_db: SELECT*FROM question
+note right of servey_db: returning every data from question table
+RowToObject <- servey_db: ResultSet
+RowToObject -> QuestionDao: listAll()
+ListQuestionAndOptionController <- QuestionDao: List<Question>
+ListQuestionAndOptionController -> HttpServer: 200 OK
+HttpServer -> browser: <div>....</div>
+User <- browser: listing questions and options
+
+@enduml

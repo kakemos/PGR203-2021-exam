@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add option to question</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.discordapp.com/attachments/892652848842698757/908346996941795398/unknown.png" rel="icon" type="image/x-icon"/>
+</head>
+<body>
+<h1 class="headline">Add option to question</h1><br>
+
+<div class="contentContainer" id="addOptionContainer">
+    <form method="POST" action="/api/alternativeAnswers">
+        <label>Question<br><select id="questions" name="questionId"></select></label><br><br>
+        <label>Option<br><input type="text" name="optionName"/></label><br><br>
+        <button>Add</button>
+    </form>
+</div><br>
+
+<div class="returnToFrontpageDiv">
+    <a href="index.html">Return to front page</a>
+</div>
+
+</body>
+<script>
+    fetch("/api/questionOptions")
+    .then(function(response){
+        return response.text();
+    }).then(function(text){
+        document.getElementById("questions").innerHTML = text;
+    });
+</script>
+</html>

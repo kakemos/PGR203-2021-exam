@@ -1,7 +1,10 @@
 package no.kristiania.http;
 
-import no.kristiania.person.PersonDao;
-import no.kristiania.person.RoleDao;
+import no.kristiania.db.dao.AnswerDao;
+import no.kristiania.http.controllers.*;
+import no.kristiania.db.dao.OptionDao;
+import no.kristiania.db.dao.PersonDao;
+import no.kristiania.db.dao.QuestionDao;
 import org.flywaydb.core.Flyway;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.slf4j.Logger;
@@ -17,27 +20,32 @@ public class SurveyServer {
 
     public static void main(String[] args) throws IOException {
         DataSource dataSource = createDataSource();
-        RoleDao roleDao = new RoleDao(dataSource);
+
         PersonDao personDao = new PersonDao(dataSource);
+        QuestionDao questionDao = new QuestionDao(dataSource);
+        AnswerDao answerDao = new AnswerDao(dataSource);
+        OptionDao optionDao = new OptionDao(dataSource);
 
-        HttpServer httpServer = new HttpServer(1962);
-        httpServer.addController(new RoleOptionsController(roleDao));
+        HttpServer httpServer = new HttpServer(1963);
+        httpServer.addController(new AddQuestionController(questionDao));
+        httpServer.addController(new ListQuestionAndOptionController(questionDao, optionDao));
+        httpServer.addController(new AddOptionController(optionDao));
+        httpServer.addController(new ListAnswersController(answerDao));
+        httpServer.addController(new listQuestionController(questionDao));
+        httpServer.addController(new AddNewAnswerController(answerDao));
+        httpServer.addController(new EditQuestionController(questionDao));
         httpServer.addController(new AddPersonController(personDao));
-        httpServer.addController(new ListPeopleController(personDao));
-        httpServer.addController(new HelloFileTargetController());
-        //httpServer.addController(new checkFileExtensionController());
+        httpServer.addController(new RedirectController());
+        httpServer.addController(new editPersonController(personDao));
 
-        // logger.info, logger.debug, logger.error, logger.warning etc
-        // {} er placeholder for parameteret httpServer.getPort()
-        logger.info("Starting http://localhost:{}/index.html", httpServer.getPort());
+        logger.info("Go to http://localhost:{}/index.html", httpServer.getPort());
     }
 
-    private static DataSource createDataSource() throws IOException {
+    public static DataSource createDataSource() throws IOException {
         Properties properties = new Properties();
         try (FileReader reader = new FileReader("pgr203.properties")) {
             properties.load(reader);
         }
-
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
         dataSource.setUrl(properties.getProperty(
                 "dataSource.url",

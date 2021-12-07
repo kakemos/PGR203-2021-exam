@@ -6,10 +6,7 @@ import java.net.Socket;
 public class HttpClient {
 
     private final int statusCode;
-    private HttpMessage httpMessage;
-
-    public static void main(String[] args) throws IOException {
-    }
+    private final HttpMessage httpMessage;
 
     public HttpClient(String host, int port, String requestTarget) throws IOException {
         Socket socket = new Socket(host, port);
